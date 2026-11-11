@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b192c">
+    <title>SafeAccess Sacchelli | Portaria</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <a class="brand" href="#" aria-label="SafeAccess Sacchelli">
+            <span class="brand-mark"><i class="fa-solid fa-shield-halved"></i></span>
+            <span>SafeAccess<br>Sacchelli</span>
+        </a>
+        <nav class="side-nav" aria-label="Navegação principal">
+            <p class="nav-label">Operação</p>
+            <button type="button" class="nav-link active" id="btn-scanner" data-tab="scanner">
+                <i class="fa-solid fa-qrcode"></i><span>Leitor QR Code</span>
+            </button>
+            <button type="button" class="nav-link" id="btn-visitantes" data-tab="visitantes">
+                <i class="fa-solid fa-user-plus"></i><span>Registrar Visitante</span>
+            </button>
+            <p class="nav-label admin-label">Administração</p>
+            <button type="button" class="nav-link" id="btn-usuarios" data-tab="usuarios">
+                <i class="fa-regular fa-user"></i><span>Gerenciar Usuários</span>
+            </button>
+            <button type="button" class="nav-link" id="btn-logs" data-tab="logs">
+                <i class="fa-regular fa-rectangle-list"></i><span>Logs de Acesso</span>
+            </button>
+        </nav>
+        <div class="sidebar-security">
+            <span class="security-shield"><i class="fa-solid fa-shield-halved"></i></span>
+            <span><strong>Sistema protegido</strong><small>Todos os serviços online</small></span>
+            <i class="security-status"></i>
+        </div>
+    </aside>
+
+    <main class="workspace">
+        <header class="topbar">
+            <div class="breadcrumbs"><span id="breadcrumb-section">Operação</span><i class="fa-solid fa-chevron-right"></i><strong id="breadcrumb-page">Leitor QR Code</strong></div>
+            <div class="account">
+                <button class="notification-button" type="button" aria-label="Notificações"><i class="fa-regular fa-bell"></i><span></span></button>
+                <span class="avatar">MS</span>
+                <span class="account-info"><strong>Marina Silva</strong><small>Administradora</small></span>
+                <i class="fa-solid fa-chevron-down account-chevron"></i>
+            </div>
+        </header>
+
+        <section id="scanner" class="page active" aria-labelledby="scanner-title">
+            <div class="page-heading">
+                <div class="heading-copy">
+                    <h1 id="scanner-title">Leitor QR Code</h1>
+                    <p>Posicione o código do visitante em frente à câmera para validar o acesso.</p>
+                </div>
+            </div>
+            <div class="scanner-status">
+                <div><i class="status-light"></i><strong>Leitor ativo</strong><span class="status-separator"></span><span>Câmera principal · Portaria 01</span></div>
+                <time id="scanner-clock">Hoje, --:--</time>
+            </div>
+            <div class="scanner-layout">
+                <article class="camera-card">
+                    <div class="camera-card-heading">
+                        <span class="camera-heading-icon"><i class="fa-solid fa-camera"></i></span>
+                        <span class="camera-heading-copy"><strong>Escaneamento em tempo real</strong><small>Aguardando um código QR válido</small></span>
+                        <span class="live-pill"><i></i> AO VIVO</span>
+                    </div>
+                    <div class="camera-view">
+                        <div class="camera-meta"><span><i class="fa-solid fa-camera"></i> CÂMERA 01</span><time id="camera-clock">--:--:--</time></div>
+                        <div class="scan-frame" aria-hidden="true"><i class="fa-solid fa-qrcode"></i><span class="scan-line"></span></div>
+                        <div id="qr-reader"></div>
+                        <p class="camera-instruction">Clique no vídeo para simular uma leitura</p>
+                    </div>
+                    <div class="camera-footer">
+                        <span><i class="fa-solid fa-camera"></i> Câmera conectada</span>
+                        <span><i class="fa-solid fa-lock"></i> Conexão segura</span>
+                        <small>Última verificação há 12s</small>
+                    </div>
+                </article>
+                <aside class="scanner-rail">
+                    <article class="manual-card">
+                        <span class="manual-icon"><i class="fa-solid fa-lock"></i></span>
+                        <p class="card-eyebrow">CONTROLE DE ACESSO</p>
+                        <h2>Liberação manual</h2>
+                        <p class="manual-description">Utilize esta opção apenas após confirmar a identidade do visitante.</p>
+                        <button type="button" id="manual-release" class="manual-button"><i class="fa-solid fa-lock"></i> Liberar Acesso Manualmente</button>
+                        <small class="manual-warning"><i class="fa-solid fa-triangle-exclamation"></i> Esta ação será registrada nos logs</small>
+                    </article>
+                    <article class="recent-card">
+                        <header class="recent-heading"><span><small>ATIVIDADE RECENTE</small><strong>Últimos acessos</strong></span><button type="button" data-open-tab="logs">Ver todos</button></header>
+                        <div id="recent-access-list"></div>
+                    </article>
+                </aside>
+            </div>
+            <footer class="page-footer"><span><i class="fa-solid fa-shield-halved"></i> Ambiente monitorado e protegido</span><small>Versão 2.4.1</small></footer>
+        </section>
+
+        <section id="visitantes" class="page" aria-labelledby="visitors-title">
+            <div class="page-heading">
+                <div class="heading-copy">
+                    <h1 id="visitors-title">Registrar Visitante</h1>
+                    <p>Cadastre uma nova visita e gere uma autorização de acesso segura.</p>
+                </div>
+            </div>
+            <div class="form-status">
+                <span><i class="status-light"></i><strong>Novo cadastro</strong><span class="status-separator"></span><small>Preencha os dados obrigatórios do visitante</small></span>
+                <small>Campos marcados com * são obrigatórios</small>
+            </div>
+            <div class="visitor-layout">
+                <form id="form-visitante" class="visitor-form">
+                    <section class="form-section">
+                        <header class="form-section-heading">
+                            <span class="section-icon"><i class="fa-solid fa-user-plus"></i></span>
+                            <span><strong>Dados do visitante</strong><small>Informações pessoais e período autorizado</small></span>
+                        </header>
+                        <div class="form-fields">
+                            <p class="form-group-label">Informações pessoais</p>
+                            <div class="field full"><label for="vis-nome">Nome completo <b>*</b></label><input id="vis-nome" name="nome" placeholder="Digite o nome do visitante" required></div>
+                            <div class="field"><label for="vis-doc">CPF ou documento <b>*</b></label><input id="vis-doc" name="documento" placeholder="000.000.000-00" required></div>
+                            <div class="field"><label for="vis-telefone">Telefone</label><input id="vis-telefone" name="telefone" type="tel" placeholder="(00) 00000-0000"></div>
+                            <div class="field full"><label for="vis-email">E-mail</label><input id="vis-email" name="email" type="email" placeholder="visitante@email.com"></div>
+                        </div>
+                        <div class="form-fields visit-details">
+                            <p class="form-group-label full">Detalhes da visita</p>
+                            <div class="field"><label for="vis-tipo">Tipo de visitante <b>*</b></label><select id="vis-tipo" name="tipo" required><option value="">Selecione</option><option>Visitante</option><option>Prestador</option><option>Fornecedor</option><option>Entregador</option></select></div>
+                            <div class="field"><label for="vis-visitado">Destino <b>*</b></label><input id="vis-visitado" name="destino" placeholder="Unidade ou setor" required></div>
+                            <div class="field"><label for="vis-data">Data de entrada <b>*</b></label><input id="vis-data" name="data" type="date" required></div>
+                            <div class="field"><label for="vis-horario">Horário <b>*</b></label><input id="vis-horario" name="horario" type="time" required></div>
+                            <div class="field full"><label for="vis-observacoes">Observações</label><textarea id="vis-observacoes" name="observacoes" placeholder="Adicione informações importantes para a portaria"></textarea></div>
+                        </div>
+                        <footer class="form-actions"><button type="reset" class="button-secondary">Cancelar</button><button type="submit" class="button-primary"><i class="fa-solid fa-check"></i> Cadastrar e gerar acesso</button></footer>
+                    </section>
+                </form>
+                <aside class="visitor-rail">
+                    <article class="info-card">
+                        <span class="section-icon"><i class="fa-solid fa-qrcode"></i></span>
+                        <p class="card-eyebrow">ACESSO DIGITAL</p>
+                        <h2>QR Code automático</h2>
+                        <p>Após o cadastro, um QR Code único será gerado e poderá ser enviado ao visitante.</p>
+                        <ul class="benefit-list"><li><i class="fa-solid fa-check"></i> Validade limitada ao período</li><li><i class="fa-solid fa-check"></i> Uso único e rastreável</li><li><i class="fa-solid fa-check"></i> Envio por e-mail ou WhatsApp</li></ul>
+                    </article>
+                    <article class="privacy-card"><i class="fa-solid fa-shield-halved"></i><span><strong>Dados protegidos</strong><small>As informações são armazenadas de forma segura e conforme a LGPD.</small></span></article>
+                </aside>
+            </div>
+            <footer class="page-footer"><span><i class="fa-solid fa-shield-halved"></i> Ambiente monitorado e protegido</span><small>Versão 2.4.1</small></footer>
+        </section>
+
+        <section id="usuarios" class="page" aria-labelledby="users-title">
+            <div class="page-heading">
+                <div class="heading-copy">
+                    <h1 id="users-title">Gerenciar Usuários</h1>
+                    <p>Gerencie operadores, permissões e o acesso ao sistema.</p>
+                </div>
+                <button id="new-user-button" type="button" class="button-primary new-user-button"><i class="fa-solid fa-user-plus"></i> Novo usuário</button>
+            </div>
+            <div class="user-stats">
+                <article class="stat-card"><span class="stat-icon"><i class="fa-regular fa-user"></i></span><span><small>Total de usuários</small><strong id="users-total">5</strong><small>4 ativos agora</small></span></article>
+                <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-shield-halved"></i></span><span><small>Administradores</small><strong id="admins-total">1</strong><small>Acesso completo</small></span></article>
+                <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-check"></i></span><span><small>Usuários ativos</small><strong id="active-users-total">4</strong><small>Sem pendências</small></span></article>
+            </div>
+            <article class="data-card">
+                <header class="data-card-heading"><span><small>CONTROLE DE EQUIPE</small><strong>Usuários do sistema</strong><small>Gerencie acessos e permissões da sua equipe</small></span><button type="button" class="button-primary" id="new-user-button-secondary"><i class="fa-solid fa-user-plus"></i> Novo usuário</button></header>
+                <div class="table-toolbar">
+                    <label class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="user-search" type="search" placeholder="Buscar por nome, e-mail ou perfil..."></label>
+                    <select id="user-role-filter" aria-label="Filtrar por perfil"><option value="">Todos os perfis</option><option>Administradora</option><option>Operador</option><option>Visualizador</option></select>
+                    <select id="user-status-filter" aria-label="Filtrar por status"><option value="">Todos os status</option><option value="Ativo">Ativo</option><option value="Inativo">Inativo</option></select>
+                </div>
+                <div class="responsive-table"><table class="data-table users-table">
+                    <thead><tr><th>Usuário</th><th>Perfil</th><th>Status</th><th>Último acesso</th><th></th></tr></thead>
+                    <tbody id="users-body"></tbody>
+                </table></div>
+                <footer class="table-footer"><span id="users-count">Mostrando 5 de 5 usuários</span><div class="pagination"><button type="button" disabled aria-label="Página anterior">‹</button><button type="button" class="current-page">1</button><button type="button" disabled aria-label="Próxima página">›</button></div></footer>
+            </article>
+            <footer class="page-footer"><span><i class="fa-solid fa-shield-halved"></i> Ambiente monitorado e protegido</span><small>Versão 2.4.1</small></footer>
+        </section>
+
+        <section id="logs" class="page" aria-labelledby="logs-title">
+            <div class="page-heading">
+                <div class="heading-copy">
+                    <h1 id="logs-title">Logs de Acesso</h1>
+                    <p>Consulte e audite todas as movimentações registradas na portaria.</p>
+                </div>
+            </div>
+            <div class="log-stats">
+                <article class="stat-card"><span class="stat-icon"><i class="fa-regular fa-rectangle-list"></i></span><span><small>Acessos hoje</small><strong>128</strong><small>+12% comparado a ontem</small></span></article>
+                <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-check"></i></span><span><small>Autorizados</small><strong>124</strong><small>96,8% do total</small></span></article>
+                <article class="stat-card"><span class="stat-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></span><span><small>Acessos negados</small><strong>4</strong><small>Requerem atenção</small></span></article>
+                <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-camera"></i></span><span><small>Portarias ativas</small><strong>3</strong><small>Todas online</small></span></article>
+            </div>
+            <article class="data-card logs-card">
+                <header class="data-card-heading"><span><small>AUDITORIA</small><strong>Histórico de acessos</strong><small>Registros detalhados de entradas e tentativas de acesso</small></span><button type="button" id="export-logs" class="button-secondary"><i class="fa-solid fa-download"></i> Exportar CSV</button></header>
+                <div class="table-toolbar log-toolbar">
+                    <label class="search-field"><i class="fa-regular fa-rectangle-list"></i><input id="log-search" type="search" placeholder="Buscar pessoa, tipo ou local..."></label>
+                    <input id="log-date-filter" type="date" aria-label="Filtrar por data">
+                    <select id="log-status-filter" aria-label="Filtrar por status"><option value="">Todos</option><option>Autorizado</option><option>Negado</option></select>
+                </div>
+                <div class="responsive-table"><table class="data-table access-table">
+                    <thead><tr><th>Data e hora</th><th>Pessoa</th><th>Método</th><th>Local</th><th>Status</th><th></th></tr></thead>
+                    <tbody id="logs-body"></tbody>
+                </table></div>
+                <footer class="table-footer"><span id="logs-count">Mostrando 6 de 128 registros</span><div class="pagination" id="logs-pagination"></div></footer>
+            </article>
+            <footer class="page-footer"><span><i class="fa-solid fa-shield-halved"></i> Ambiente monitorado e protegido</span><small>Versão 2.4.1</small></footer>
+        </section>
+    </main>
+
+    <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-content"><span class="modal-check"><i class="fa-solid fa-check"></i></span><h2 id="modal-title">Status</h2><p id="modal-msg">Mensagem...</p><button type="button" class="button-primary" onclick="closeModal()">Entendi</button></div>
+    </div>
+
+    <div id="user-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="user-modal-title">
+        <form id="form-usuario" class="modal-content user-dialog">
+            <button type="button" class="dialog-close" id="close-user-modal" aria-label="Fechar"><i class="fa-solid fa-xmark"></i></button>
+            <span class="section-icon"><i class="fa-solid fa-user-plus"></i></span>
+            <h2 id="user-modal-title">Novo usuário</h2>
+            <p>Informe os dados do colaborador para liberar o acesso ao sistema.</p>
+            <div class="field"><label for="usr-nome">Nome completo <b>*</b></label><input type="text" id="usr-nome" required placeholder="Nome do colaborador"></div>
+            <div class="field"><label for="usr-email">E-mail corporativo <b>*</b></label><input type="email" id="usr-email" required placeholder="nome@empresa.com"></div>
+            <div class="field"><label for="usr-perfil">Perfil de acesso <b>*</b></label><select id="usr-perfil" required><option value="">Selecione um perfil</option><option>Administradora</option><option>Operador</option><option>Visualizador</option></select></div>
+            <div class="field"><label for="usr-senha">Senha inicial <b>*</b></label><input type="password" id="usr-senha" required placeholder="Crie uma senha inicial" minlength="6"></div>
+            <div class="dialog-actions"><button type="button" id="cancel-user-modal" class="button-secondary">Cancelar</button><button type="submit" class="button-primary"><i class="fa-solid fa-check"></i> Cadastrar usuário</button></div>
+        </form>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
